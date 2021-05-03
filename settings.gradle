@@ -6,4 +6,4 @@ dependencyResolutionManagement {
         jcenter()
     }
 }
-rootProject.name = "SystemUITileHook"
+rootProject.name = "FuckSystemUI"

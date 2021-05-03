@@ -8,7 +8,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "ltd.nextalone.SystemUITileHook"
+        applicationId "ltd.nextalone.fucksystemui"
         minSdkVersion 30
         targetSdkVersion 30
         versionCode(getTimeStamp.call() as int)

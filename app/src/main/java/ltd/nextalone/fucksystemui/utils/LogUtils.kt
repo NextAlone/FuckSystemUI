@@ -1,8 +1,8 @@
-package ltd.nextalone.systemuitilehook.utils
+package ltd.nextalone.fucksystemui.utils
 
 import android.util.Log
-import ltd.nextalone.systemuitilehook.DEBUG
-import ltd.nextalone.systemuitilehook.TAG
+import ltd.nextalone.fucksystemui.DEBUG
+import ltd.nextalone.fucksystemui.TAG
 import java.lang.reflect.Method
 
 

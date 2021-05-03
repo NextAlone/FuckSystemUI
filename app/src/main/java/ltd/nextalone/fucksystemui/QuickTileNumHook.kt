@@ -1,6 +1,6 @@
-package ltd.nextalone.systemuitilehook
+package ltd.nextalone.fucksystemui
 
-import ltd.nextalone.systemuitilehook.utils.*
+import ltd.nextalone.fucksystemui.utils.*
 
 object QuickTileNumHook {
     private var inited = false

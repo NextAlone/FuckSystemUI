@@ -2,6 +2,6 @@
 <resources>
   <string-array name="xposedscope">
     <item>com.android.systemui</item>
-    <item>ltd.nextalone.SystemUITileHook</item>
+    <item>ltd.nextalone.fucksystemui</item>
   </string-array>
 </resources>

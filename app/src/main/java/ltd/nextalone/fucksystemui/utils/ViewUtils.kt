@@ -1,4 +1,4 @@
-package ltd.nextalone.systemuitilehook.utils
+package ltd.nextalone.fucksystemui.utils
 
 import android.content.Context
 import android.view.View

@@ -1,4 +1,4 @@
-package ltd.nextalone.systemuitilehook
+package ltd.nextalone.fucksystemui
 
 import android.annotation.SuppressLint
 import android.content.res.AssetManager
@@ -8,10 +8,10 @@ import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.IXposedHookZygoteInit
 import de.robv.android.xposed.IXposedHookZygoteInit.StartupParam
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam
-import ltd.nextalone.systemuitilehook.utils.logDebug
-import ltd.nextalone.systemuitilehook.utils.logDetail
-import ltd.nextalone.systemuitilehook.utils.logError
-import ltd.nextalone.systemuitilehook.utils.logThrowable
+import ltd.nextalone.fucksystemui.utils.logDebug
+import ltd.nextalone.fucksystemui.utils.logDetail
+import ltd.nextalone.fucksystemui.utils.logError
+import ltd.nextalone.fucksystemui.utils.logThrowable
 import java.io.File
 
 class HookEntry : IXposedHookLoadPackage, IXposedHookZygoteInit {
@@ -92,6 +92,4 @@ class HookEntry : IXposedHookLoadPackage, IXposedHookZygoteInit {
             logError(e.toString())
         }
     }
-
-
 }

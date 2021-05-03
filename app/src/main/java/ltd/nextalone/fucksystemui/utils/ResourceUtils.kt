@@ -1,10 +1,10 @@
-package ltd.nextalone.systemuitilehook.utils
+package ltd.nextalone.fucksystemui.utils
 
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.view.View
-import ltd.nextalone.systemuitilehook.PACKAGE_NAME
+import ltd.nextalone.fucksystemui.PACKAGE_NAME
 
 internal fun Context.hostId(name: String): Int = this.resources.getIdentifier(name, "id", "com.android.packageinstaller")
 

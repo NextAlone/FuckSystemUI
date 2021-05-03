@@ -1,13 +1,11 @@
-package ltd.nextalone.systemuitilehook.utils
+package ltd.nextalone.fucksystemui.utils
 
 import de.robv.android.xposed.XposedHelpers
-import ltd.nextalone.systemuitilehook.HookEntry
+import ltd.nextalone.fucksystemui.HookEntry
 import java.lang.reflect.Field
 
 internal val String.clazz: Class<*>?
-    get() = tryOrNull {
-        HookEntry.lpClassLoader?.loadClass(this)
-    } as Class<*>?
+    get() = HookEntry.lpClassLoader?.loadClass(this)
 
 internal fun Any.findField(name: String?, type: Class<*>?): Field? {
     if (name?.length!! > 0) {
