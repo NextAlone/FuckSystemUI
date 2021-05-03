@@ -8,7 +8,6 @@ import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.IXposedHookZygoteInit
 import de.robv.android.xposed.IXposedHookZygoteInit.StartupParam
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam
-import ltd.nextalone.systemuitilehook.HookEntry
 import ltd.nextalone.systemuitilehook.utils.logDebug
 import ltd.nextalone.systemuitilehook.utils.logDetail
 import ltd.nextalone.systemuitilehook.utils.logError
@@ -17,7 +16,7 @@ import java.io.File
 
 class HookEntry : IXposedHookLoadPackage, IXposedHookZygoteInit {
     override fun handleLoadPackage(lpparam: LoadPackageParam) {
-       logDetail(lpparam.packageName)
+        logDetail(lpparam.packageName)
         if (PACKAGE_NAME == lpparam.packageName) {
             if (!sInitialized) {
                 sInitialized = true
@@ -36,6 +35,17 @@ class HookEntry : IXposedHookLoadPackage, IXposedHookZygoteInit {
         private var sInitialized = false
         private var modulePath: String? = null
 
+    }
+
+    private fun initializeHookInternal(lpparam: LoadPackageParam) {
+        logDebug("Hooked")
+        try {
+            lpClassLoader = lpparam.classLoader
+            logDebug("Hooked succeeded")
+            QuickTileNumHook.init()
+        } catch (e: Exception) {
+            logThrowable("initializeHookInternal: ", e)
+        }
     }
 
     fun injectModuleResources(res: Resources?) {
@@ -83,14 +93,5 @@ class HookEntry : IXposedHookLoadPackage, IXposedHookZygoteInit {
         }
     }
 
-    private fun initializeHookInternal(lpparam: LoadPackageParam) {
-        logDebug("Hooked")
-        try {
-            lpClassLoader = lpparam.classLoader
-            logDebug("Hooked succeeded")
-            // todo init once
-        } catch (e: Exception) {
-            logThrowable("initializeHookInternal: ", e)
-        }
-    }
+
 }

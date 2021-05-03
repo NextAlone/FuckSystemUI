@@ -1,6 +1,11 @@
 package ltd.nextalone.systemuitilehook.utils
 
 import android.content.Context
+import android.view.View
+import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
 
 
 const val MATCH_PARENT = -1
@@ -23,4 +28,18 @@ fun Context.px2sp(pxValue: Float): Int {
     val fontScale = resources.displayMetrics.scaledDensity
     return (pxValue / fontScale + 0.5f).toInt()
 }
+
+internal val linearParams = LinearLayout.LayoutParams(0, 0)
+internal val relativeParams = RelativeLayout.LayoutParams(0, 0)
+internal val frameLayoutParams = FrameLayout.LayoutParams(0, 0)
+
+internal fun View.hide() {
+    this.visibility = View.GONE
+    when (this.parent as ViewGroup) {
+        is LinearLayout -> this.layoutParams = linearParams
+        is RelativeLayout -> this.layoutParams = relativeParams
+        is FrameLayout -> this.layoutParams = frameLayoutParams
+    }
+}
+
 

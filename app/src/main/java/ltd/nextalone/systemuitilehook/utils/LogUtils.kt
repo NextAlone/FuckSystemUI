@@ -1,19 +1,20 @@
 package ltd.nextalone.systemuitilehook.utils
 
 import android.util.Log
+import ltd.nextalone.systemuitilehook.DEBUG
 import ltd.nextalone.systemuitilehook.TAG
 import java.lang.reflect.Method
 
 
 internal fun logDebug(msg: String) {
-    Log.d(TAG, msg)
+    if (DEBUG) Log.d(TAG, msg)
 }
 
 internal fun logError(msg: String) {
     Log.e(TAG, msg)
 }
 
-internal fun logThrowable(msg: String, t: Throwable? = null) {
+internal fun logThrowable(msg: String?, t: Throwable? = null) {
     Log.e(TAG, msg + t?.message, t)
 }
 

@@ -1,10 +1,17 @@
 package ltd.nextalone.systemuitilehook.utils
 
+import de.robv.android.xposed.XposedHelpers
+import ltd.nextalone.systemuitilehook.HookEntry
 import java.lang.reflect.Field
 
-fun findField(clazz: Class<*>?, type: Class<*>?, name: String?): Field? {
-    if (clazz != null && name?.length!! > 0) {
-        var clz: Class<*> = clazz
+internal val String.clazz: Class<*>?
+    get() = tryOrNull {
+        HookEntry.lpClassLoader?.loadClass(this)
+    } as Class<*>?
+
+internal fun Any.findField(name: String?, type: Class<*>?): Field? {
+    if (name?.length!! > 0) {
+        var clz: Class<*> = this.javaClass
         do {
             for (field in clz.declaredFields) {
                 if ((type == null || field.type == type) && (field.name == name)
@@ -18,40 +25,34 @@ fun findField(clazz: Class<*>?, type: Class<*>?, name: String?): Field? {
     return null
 }
 
-fun iGetObjectOrNull(obj: Any, name: String?): Any? {
-    return iGetObjectOrNull<Any>(obj, name, null)
-}
+internal fun Any.get(objName: String): Any? = this.get(objName, null)
 
-fun <T> iGetObjectOrNull(obj: Any, name: String?, type: Class<T>?): T? {
-    val clazz: Class<*> = obj.javaClass
+internal fun <T> Any.get(name: String, type: Class<T>? = null): T? {
     try {
-        val f: Field = findField(clazz, type, name) as Field
+        val f: Field = this.javaClass.findField(name, type) as Field
         f.isAccessible = true
-        return f[obj] as T
+        return f[this] as T
     } catch (e: Exception) {
     }
     return null
 }
 
-fun iPutObject(obj: Any, name: String?, value: Any?) {
-    iPutObject(obj, name, null, value)
-}
+internal fun Any.set(name: String, value: Any): Any = this.set(name, null, value)
 
-fun iPutObject(obj: Any, name: String?, type: Class<*>?, value: Any?) {
-    val clazz: Class<*> = obj.javaClass
+internal fun Any.set(name: String, type: Class<*>?, value: Any) {
     try {
-        val f: Field = findField(clazz, type, name) as Field
+        val f: Field = this.javaClass.findField(name, type) as Field
         f.isAccessible = true
-        f[obj] = value
+        f[this] = value
     } catch (e: java.lang.Exception) {
     }
 }
 
-internal fun Any.get(objName: String): Any? = this.get(objName, null)
+internal fun Class<*>?.instance(vararg arg: Any?): Any = XposedHelpers.newInstance(this, *arg)
 
-internal fun <T> Any.get(objName: String, clz: Class<T>? = null): T? = iGetObjectOrNull(this, objName, clz)
+internal fun Class<*>?.instance(type: Array<Class<*>>, vararg arg: Any?): Any =
+    XposedHelpers.newInstance(this, type, *arg)
 
-internal fun Any.set(name: String, value: Any): Any = iPutObject(this, name, value)
-
-internal fun Any.set(name: String, clz: Class<*>?, value: Any): Any = iPutObject(this, name, clz, value)
+internal fun Any?.invoke(name: String, vararg args: Any): Any? =
+    XposedHelpers.findMethodBestMatch(this?.javaClass, name, * args).invoke(this, *args)
 
