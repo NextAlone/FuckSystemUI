@@ -1,16 +1,11 @@
-package ltd.nextalone.fucksystemui
+package ltd.nextalone.fucksystemui.hook
 
+import ltd.nextalone.fucksystemui.base.BaseHook
 import ltd.nextalone.fucksystemui.utils.*
 
-object QuickTileNumHook {
-    private var inited = false
+object QuickTileNumHook : BaseHook() {
 
-    fun init() {
-        if (inited) return
-        inited = initOnce()
-    }
-
-    private fun initOnce() = tryOrFalse {
+    override fun initOnce() = tryOrFalse {
         logStart()
         "com.android.systemui.qs.QuickQSPanel".clazz?.method("setMaxTiles")?.hookBefore {
             it.args[0] = 8

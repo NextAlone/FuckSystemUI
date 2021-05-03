@@ -8,6 +8,7 @@ import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.IXposedHookZygoteInit
 import de.robv.android.xposed.IXposedHookZygoteInit.StartupParam
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam
+import ltd.nextalone.fucksystemui.hook.QuickTileNumHook
 import ltd.nextalone.fucksystemui.utils.logDebug
 import ltd.nextalone.fucksystemui.utils.logDetail
 import ltd.nextalone.fucksystemui.utils.logError
@@ -15,6 +16,14 @@ import ltd.nextalone.fucksystemui.utils.logThrowable
 import java.io.File
 
 class HookEntry : IXposedHookLoadPackage, IXposedHookZygoteInit {
+    companion object {
+        private var myClassLoader: ClassLoader? = null
+        var lpClassLoader: ClassLoader? = null
+        private var sInitialized = false
+        private var modulePath: String? = null
+
+    }
+
     override fun handleLoadPackage(lpparam: LoadPackageParam) {
         logDetail(lpparam.packageName)
         if (PACKAGE_NAME == lpparam.packageName) {
@@ -27,14 +36,6 @@ class HookEntry : IXposedHookLoadPackage, IXposedHookZygoteInit {
 
     override fun initZygote(startupParam: StartupParam) {
         modulePath = startupParam.modulePath
-    }
-
-    companion object {
-        private var myClassLoader: ClassLoader? = null
-        var lpClassLoader: ClassLoader? = null
-        private var sInitialized = false
-        private var modulePath: String? = null
-
     }
 
     private fun initializeHookInternal(lpparam: LoadPackageParam) {
