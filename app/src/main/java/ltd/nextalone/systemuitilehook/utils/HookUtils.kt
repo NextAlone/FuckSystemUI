@@ -5,6 +5,7 @@ import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedBridge
 import ltd.nextalone.systemuitilehook.HookEntry
+import ltd.nextalone.systemuitilehook.TAG
 import java.lang.reflect.Member
 import java.lang.reflect.Method
 

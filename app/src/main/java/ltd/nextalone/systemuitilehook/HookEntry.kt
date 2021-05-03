@@ -17,7 +17,7 @@ import java.io.File
 
 class HookEntry : IXposedHookLoadPackage, IXposedHookZygoteInit {
     override fun handleLoadPackage(lpparam: LoadPackageParam) {
-        "handleLoadPackage".logDetail(lpparam.packageName)
+       logDetail(lpparam.packageName)
         if (PACKAGE_NAME == lpparam.packageName) {
             if (!sInitialized) {
                 sInitialized = true
@@ -35,60 +35,62 @@ class HookEntry : IXposedHookLoadPackage, IXposedHookZygoteInit {
         var lpClassLoader: ClassLoader? = null
         private var sInitialized = false
         private var modulePath: String? = null
-        private fun initializeHookInternal(lpparam: LoadPackageParam) {
-            logDebug("Hooked")
-            try {
-                lpClassLoader = lpparam.classLoader
-                logDebug("Hooked succeeded")
-                // todo init once
-            } catch (e: Exception) {
-                logThrowable("initializeHookInternal: ", e)
-            }
-        }
 
-        fun injectModuleResources(res: Resources?) {
-            if (res == null) {
+    }
+
+    fun injectModuleResources(res: Resources?) {
+        if (res == null) {
+            return
+        }
+        try {
+            res.getString(R.string.res_inject_success)
+            return
+        } catch (ignored: NotFoundException) {
+        }
+        try {
+            if (myClassLoader == null) {
+                myClassLoader = HookEntry::class.java.classLoader
+            }
+            if (modulePath == null) {
                 return
             }
+            val assets = res.assets
+            @SuppressLint("DiscouragedPrivateApi") val addAssetPath = AssetManager::class.java.getDeclaredMethod("addAssetPath", String::class.java)
+            addAssetPath.isAccessible = true
+            val cookie = addAssetPath.invoke(assets, modulePath) as Int
             try {
-                res.getString(R.string.res_inject_success)
-                return
-            } catch (ignored: NotFoundException) {
-            }
-            try {
-                if (myClassLoader == null) {
-                    myClassLoader = HookEntry::class.java.classLoader
-                }
-                if (modulePath == null) {
-                    return
-                }
-                val assets = res.assets
-                @SuppressLint("DiscouragedPrivateApi") val addAssetPath = AssetManager::class.java.getDeclaredMethod("addAssetPath", String::class.java)
-                addAssetPath.isAccessible = true
-                val cookie = addAssetPath.invoke(assets, modulePath) as Int
+                "injectModuleResources".logDetail(res.getString(R.string.res_inject_success))
+            } catch (e: NotFoundException) {
+                logError("Fatal: injectModuleResources: test injection failure!")
+                logError("injectModuleResources: cookie=$cookie, path=$modulePath, loader=$myClassLoader")
+                var length: Long = -1
+                var read = false
+                var exist = false
+                var isDir = false
                 try {
-                    "injectModuleResources".logDetail(res.getString(R.string.res_inject_success))
-                } catch (e: NotFoundException) {
-                    logError("Fatal: injectModuleResources: test injection failure!")
-                    logError("injectModuleResources: cookie=$cookie, path=$modulePath, loader=$myClassLoader")
-                    var length: Long = -1
-                    var read = false
-                    var exist = false
-                    var isDir = false
-                    try {
-                        val f = File(modulePath!!)
-                        exist = f.exists()
-                        isDir = f.isDirectory
-                        length = f.length()
-                        read = f.canRead()
-                    } catch (e2: Throwable) {
-                        logError(e2.toString())
-                    }
-                    logError("getModulePath: exists = $exist, isDirectory = $isDir, canRead = $read, fileLength = $length")
+                    val f = File(modulePath!!)
+                    exist = f.exists()
+                    isDir = f.isDirectory
+                    length = f.length()
+                    read = f.canRead()
+                } catch (e2: Throwable) {
+                    logError(e2.toString())
                 }
-            } catch (e: Exception) {
-                logError(e.toString())
+                logError("getModulePath: exists = $exist, isDirectory = $isDir, canRead = $read, fileLength = $length")
             }
+        } catch (e: Exception) {
+            logError(e.toString())
+        }
+    }
+
+    private fun initializeHookInternal(lpparam: LoadPackageParam) {
+        logDebug("Hooked")
+        try {
+            lpClassLoader = lpparam.classLoader
+            logDebug("Hooked succeeded")
+            // todo init once
+        } catch (e: Exception) {
+            logThrowable("initializeHookInternal: ", e)
         }
     }
 }

@@ -17,8 +17,8 @@ internal fun logThrowable(msg: String, t: Throwable? = null) {
     Log.e(TAG, msg + t?.message, t)
 }
 
-internal fun <T : Any> T.logDetail(info: String, vararg msg: Any?) {
-    logDebug("${this.javaClass.simpleName}: $info, ${msg.joinToString(", ")}")
+internal fun <T : Any> T.logDetail(vararg msg: Any?) {
+    logDebug("${this.javaClass.simpleName}: ${msg.joinToString(", ")}")
 }
 
 internal fun <T : Any> T.logStart() {
